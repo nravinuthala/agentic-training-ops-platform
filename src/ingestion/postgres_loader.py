@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pandas as pd
-from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
