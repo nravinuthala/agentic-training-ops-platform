@@ -25,3 +25,7 @@ class CourseSkill(Base):
             f"CourseSkill(course_skill_id={self.course_skill_id!r}, course_id={self.course_id!r}, "
             f"skill_id={self.skill_id!r}, importance={self.importance!r})"
         )
+
+
+from src.models.course import Course
+from src.models.skill import Skill

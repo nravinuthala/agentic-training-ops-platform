@@ -31,3 +31,6 @@ class Trainer(Base):
             f"Trainer(trainer_id={self.trainer_id!r}, trainer_code={self.trainer_code!r}, "
             f"trainer_name={self.trainer_name!r})"
         )
+
+
+from src.models.trainer_skill import TrainerSkill

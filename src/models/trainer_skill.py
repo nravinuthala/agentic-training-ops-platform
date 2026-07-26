@@ -25,3 +25,7 @@ class TrainerSkill(Base):
             f"TrainerSkill(trainer_skill_id={self.trainer_skill_id!r}, trainer_id={self.trainer_id!r}, "
             f"skill_id={self.skill_id!r}, proficiency={self.proficiency!r})"
         )
+
+
+from src.models.skill import Skill
+from src.models.trainer import Trainer

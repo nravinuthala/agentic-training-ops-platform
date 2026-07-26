@@ -29,3 +29,6 @@ class Course(Base):
             f"Course(course_id={self.course_id!r}, course_code={self.course_code!r}, "
             f"course_name={self.course_name!r})"
         )
+
+
+from src.models.course_skill import CourseSkill

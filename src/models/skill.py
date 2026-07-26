@@ -32,3 +32,7 @@ class Skill(Base):
             f"Skill(skill_id={self.skill_id!r}, skill_code={self.skill_code!r}, "
             f"skill_name={self.skill_name!r})"
         )
+
+
+from src.models.course_skill import CourseSkill
+from src.models.trainer_skill import TrainerSkill
