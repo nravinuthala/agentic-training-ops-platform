@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import shutil
+import sys
 from pathlib import Path
 from typing import Dict
 
@@ -29,6 +30,18 @@ class ExcelLoader:
                     self.data_dir.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(candidate, self.data_dir / file_name)
                 return candidate
+
+        if (self.repo_root / "generate_seed_data.py").exists():
+            sys.path.insert(0, str(self.repo_root))
+            from generate_seed_data import generate_all_datasets
+
+            generated_files = generate_all_datasets(output_dir=self.repo_root / "data")
+            for generated_file in generated_files:
+                if generated_file.name == file_name:
+                    target_file = self.data_dir / file_name
+                    self.data_dir.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(generated_file, target_file)
+                    return target_file
 
         raise FileNotFoundError(f"Excel file not found: {self.data_dir / file_name}")
 
