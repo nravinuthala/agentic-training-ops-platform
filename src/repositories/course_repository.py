@@ -67,6 +67,36 @@ class CourseRepository:
             ],
         }
 
+    def get_course_requirements(self, course_code: str) -> dict[str, Any] | None:
+        """Return course skill requirements grouped by mandatory and recommended."""
+        course = self.session.execute(
+            select(Course).filter(Course.course_code == course_code)
+        ).scalar_one_or_none()
+
+        if course is None:
+            return None
+
+        mandatory_skills: list[dict[str, Any]] = []
+        recommended_skills: list[dict[str, Any]] = []
+
+        for relation in course.course_skills:
+            requirement = {
+                "skill_name": relation.skill.skill_name,
+                "skill_category": relation.skill.skill_category,
+                "importance": relation.importance,
+            }
+            if str(relation.importance or "").lower() == "mandatory":
+                mandatory_skills.append(requirement)
+            else:
+                recommended_skills.append(requirement)
+
+        return {
+            "course_code": course.course_code,
+            "course_name": course.course_name,
+            "mandatory_skills": mandatory_skills,
+            "recommended_skills": recommended_skills,
+        }
+
     def list_all_courses(self) -> list[dict[str, Any]]:
         statement = select(Course).order_by(Course.course_name.asc())
         return [self._course_to_dict(course) for course in self.session.execute(statement).scalars().all()]

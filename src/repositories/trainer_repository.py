@@ -125,6 +125,38 @@ class TrainerRepository:
             "skills": skills,
         }
 
+    def get_trainer_skill_profiles(self) -> List[dict[str, object]]:
+        """Return trainer availability and skill proficiency profiles for ranking."""
+        statement = (
+            select(
+                Trainer.trainer_code,
+                Trainer.trainer_name,
+                Trainer.availability_percentage,
+                TrainerSkill.proficiency,
+                Skill.skill_name,
+            )
+            .join(Trainer.trainer_skills)
+            .join(TrainerSkill.skill)
+            .order_by(Trainer.trainer_code.asc(), Trainer.trainer_name.asc())
+        )
+
+        rows = self.session.execute(statement).all()
+        profiles: dict[str, dict[str, object]] = {}
+
+        for trainer_code, trainer_name, availability, proficiency, skill_name in rows:
+            profile = profiles.setdefault(
+                trainer_code,
+                {
+                    "trainer_code": trainer_code,
+                    "trainer_name": trainer_name,
+                    "availability_percentage": availability,
+                    "skills": [],
+                },
+            )
+            profile["skills"].append({"skill_name": skill_name, "proficiency": proficiency})
+
+        return list(profiles.values())
+
     @staticmethod
     def _row_to_result(row: tuple[object, ...]) -> dict[str, object]:
         return {
